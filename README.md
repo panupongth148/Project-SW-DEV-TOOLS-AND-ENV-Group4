@@ -23,8 +23,9 @@
 ## Commit Type
 | Type  | Description |
 | ------------- | ------------- |
-| feat  | การเพิ่มฟีเจอร์ใหม่  |
-| docs  | การเพิ่มเอกสาร  |
+| build | การเพิ่มหรือเปลี่ยนแปลงเชิงโครงสร้างระบบของแอปพลิเคชัน |
+| feat  | การเพิ่มหรือเปลี่ยนแปลงฟีเจอร์ใหม่  |
+| docs  | การเพิ่มหรือเปลี่ยนแปลงเอกสาร  |
 | refactor | การ refactoring code  |
 | wiki | การเพิ่มหรือแก้ไขข้อมูลใน wiki  |
 | style | การแก้ไขในส่วนอื่น ๆ ที่ไม่ส่งผลกระทบต่อ code ของ project (white-space, formatting, missing semi-colons etc.)  |
