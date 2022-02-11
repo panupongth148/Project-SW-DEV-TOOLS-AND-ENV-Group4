@@ -14,6 +14,11 @@ const routers = [
     name: 'frontstore',
     component: () => import('../views/frontStore.vue')
   },
+  {
+    path: '/store/addbook/:storeId',
+    name: 'addBook',
+    component: () => import('../views/store/addBook.vue')
+  },
 ]
 
 const router = new VueRouter({
