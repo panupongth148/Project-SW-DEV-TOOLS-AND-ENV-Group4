@@ -19,6 +19,11 @@ const routers = [
     name: 'addBook',
     component: () => import('../views/store/addBook.vue')
   },
+  {
+    path: '/store/editbook/:bookId',
+    name: 'editBook',
+    component: () => import('../views/store/editbook.vue')
+  },
 ]
 
 const router = new VueRouter({
