@@ -128,6 +128,7 @@
 </template>
 
 <script>
+import axios from "@/plugins/axios";
 
 export default {
   name: 'App',
@@ -140,6 +141,66 @@ export default {
       type: "",
       store: "",
     };
+  },
+  mounted() {
+    this.onAuthChange();
+    this.getBlogs();
+  },
+  methods: {
+    getBlogs() {
+      axios
+        .get("/getallbook", {
+          params: {
+            search: this.search,
+            type: this.type,
+          },
+        })
+        .then((response) => {
+          this.blogs = response.data;
+          if (this.user.type != 'customer') {
+            this.getStore()
+          }
+          
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getStore() {
+      axios.get(`/store/${this.user.account_id}`).then((response) =>{
+        this.store = response.data
+      }).catch((err) =>{
+        console.log(err)
+      })
+    },
+    imagePath(file_path) {
+      if (file_path) {
+        console.log(file_path);
+        return "http://localhost:3000/" + file_path;
+      } else {
+        return "https://bulma.io/images/placeholders/640x360.png";
+      }
+    },
+    onAuthChange() {
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        this.getUser();
+      }
+    },
+    getUser() {
+      axios.get("/user/me").then((res) => {
+        this.user = res.data;
+      });
+    },
+    logout() {
+      localStorage.clear();
+      this.user = null;
+      this.$router.push({ path: "/" });
+    },
+    inputType(type) {
+      this.type = type;
+    },
   },
 }
 </script>
