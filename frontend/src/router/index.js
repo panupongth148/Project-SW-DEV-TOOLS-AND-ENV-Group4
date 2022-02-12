@@ -10,19 +10,20 @@ const routers = [
     component: () => import('../views/home.vue'),
   },
   {
-    path: '/store/frontstore',
-    name: 'frontstore',
-    component: () => import('../views/frontStore.vue')
-  },
-  {
-    path: '/store/addbook/:storeId',
-    name: 'addBook',
-    component: () => import('../views/store/addBook.vue')
+    path: '/store/managebook/:storeId',
+    name: 'manageStore',
+    meta: { login: true },
+    component: () => import('../views/manageBook.vue')
   },
   {
     path: '/store/editbook/:bookId',
     name: 'editBook',
-    component: () => import('../views/store/editbook.vue')
+    component: () => import('../views/editBook.vue')
+  },
+  {
+    path: '/store/addbook/:storeId',
+    name: 'addBook',
+    component: () => import('../views/addBook.vue')
   },
 ]
 
