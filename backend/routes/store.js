@@ -1,8 +1,6 @@
 const express = require("express");
 const path = require("path");
-
 const fs = require("fs");
-
 
 const firebase = require("../db");
 
@@ -23,8 +21,8 @@ var storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-
-router.get("/store/managebook/:storeid", async function (req, res, next) {
+/* GetBooksfromstore api */
+router.get("/store/managebook/:id", async function (req, res, next) {
   // const conn = await pool.getConnection();
   // await conn.beginTransaction();
   // console.log(req.params.id)
@@ -34,7 +32,7 @@ router.get("/store/managebook/:storeid", async function (req, res, next) {
     const snapshot = await firebase
       .firestore()
       .collection("book")
-      .where("store_id", "==", req.params.storeid)
+      .where("store_id", "==", req.params.id)
       .get();
     await snapshot.forEach((res) => {
       // idcollection = res.id;
@@ -56,6 +54,101 @@ router.get("/store/managebook/:storeid", async function (req, res, next) {
   }
 });
 
+/* update book api */
+router.put(
+  "/store/editbook/:id",
+  upload.array("imageBook", 5),
+  async (req, res, next) => {
+    const file = req.files;
+    let pathArray = [];
 
+    if (!file) {
+      const error = new Error("Please upload a file");
+      error.httpStatusCode = 400;
+      next(error);
+    }
+    console.log("book_name")
+    const book_name = req.body.book_name;
+    const book_type = req.body.book_type;
+    const book_count = req.body.book_count;
+    const book_price = req.body.book_price;
+    const book_category = req.body.book_category;
+    const book_discount = req.body.book_discount;
+    const book_description = req.body.book_description;
+    // const imageBook = req.body.imageBook;
+    // let discountPrice = req.body.bookDiscount;
+    // console.log(discountPrice);
+
+
+    // const conn = await pool.getConnection();
+    // await conn.beginTransaction();
+
+    try {
+      // console.log(content)
+
+      if (file.length > 0) {
+        let image;
+        req.files.forEach((file, index) => {
+          // let path = {index: file.path.substring(6)};
+          image = file.path.substring(6);
+          // image = {
+          //   0: file.path.substring(6)
+          // }
+          // pathArray.push(path);
+        });
+        let bookobj = {
+          book_name: book_name,
+          book_type: book_type,
+          book_description: book_description,
+          book_count: book_count,
+          book_price: book_price,
+          book_category: book_category,
+          book_discount: book_discount,
+          book_reccommend: 0,
+          store_id: req.params.storeId,
+          image: image
+        }
+        let id = req.params.id;
+        console.log(id)
+        console.log(bookobj)
+        await firebase
+          .firestore()
+          .collection("book")
+          .doc(id)
+          .update(bookobj);
+      }else{
+        let bookobj = {
+          book_name: book_name,
+          book_type: book_type,
+          book_description: book_description,
+          book_count: book_count,
+          book_price: book_price,
+          book_category: book_category,
+          book_discount: book_discount,
+          book_reccommend: 0,
+          
+        }
+        let id = req.params.id;
+        console.log(id)
+        console.log(bookobj)
+        await firebase
+          .firestore()
+          .collection("book")
+          .doc(id)
+          .update(bookobj);
+      
+      }
+
+      
+      res.send("success!");
+    } catch (err) {
+      
+      next(err);
+    } finally {
+      console.log("finally");
+      
+    }
+  }
+);
 
 exports.router = router;
