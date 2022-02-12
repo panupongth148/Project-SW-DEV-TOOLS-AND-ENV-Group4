@@ -151,4 +151,25 @@ router.put(
   }
 );
 
+/* delete book api */
+router.delete(
+  "/store/managebook/deletebook/:id",
+  async function (req, res, next) {
+    console.log(req.params.id);
+    try {
+      let id = req.params.id
+      console.log(id)
+      await firebase
+          .firestore()
+          .collection("book")
+          .doc(id).delete();
+
+      res.json("success");
+    } catch (error) {
+      console.log("error");
+      res.status(500).json(error);
+    }
+  }
+);
+
 exports.router = router;
