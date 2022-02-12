@@ -30,7 +30,7 @@
               >
             </div>
             <div class="column is-1 mt-1">
-              <button class="button" @click="deleteBook(book.book_id, index)">
+              <button class="button" @click="deleteBook(book.book_id)">
                 <label class="label">ลบสินค้า</label>
               </button>
             </div>
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import axios from "@/plugins/axios";
 
 export default {
   name: "Home",
@@ -63,10 +64,47 @@ export default {
   },
 
   mounted() {
-    
+    this.getBookOfStore(this.$route.params.storeId);
   },
   methods: {
-
+    getBookOfStore(id) {
+      axios
+        .get(`http://localhost:3000/store/managebook/${id}`)
+        .then((response) => {
+          this.books = response.data.book;
+          console.log(this.books)
+        })
+        .catch((error) => {
+          this.error = error.response.data.message;
+        });
+    },
+    imagePath(file_path) {
+      
+      if (file_path) {
+        return "http://localhost:3000/" + file_path;
+      } else {
+        return "https://bulma.io/images/placeholders/640x360.png";
+      }
+    },
+    shortContent(content) {
+      if (content.length > 200) {
+        return content.substring(0, 197) + "...";
+      }
+      return content;
+    },
+    deleteBook(id) {
+      let confirmDeleteBook = confirm("Are you sure to delete this book");
+      if (confirmDeleteBook ) {
+        axios
+          .delete(`http://localhost:3000/store/managebook/deletebook/${id}`)
+          .then(() => {
+            location.reload()
+          })
+          .catch((error) => {
+            this.error = error.response.data.message;
+          });
+      }
+    },
   },
 };
 </script>
