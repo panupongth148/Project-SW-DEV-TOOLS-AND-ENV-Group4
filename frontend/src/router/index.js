@@ -24,6 +24,11 @@ const routers = [
     name: 'addBook',
     component: () => import('../views/addBook.vue')
   },
+  {
+    path: '/account/login',
+    name: 'login',
+    component: () => import('../views/account/login.vue')
+  },
 ]
 
 const router = new VueRouter({
