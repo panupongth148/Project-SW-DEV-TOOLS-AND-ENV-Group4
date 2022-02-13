@@ -134,11 +134,6 @@
           </div>
         </div>
       </div>
-      <template v-if="checkpic">
-        <p class="help is-danger is-size-4">
-          รูปภาพเกิน 5 รูป
-        </p>
-      </template>
       <div class="columns">
         <div class="column is-1 is-offset-10">
           <button class="button is-primary is-medium" @click="submit()">
@@ -147,7 +142,7 @@
         </div>
         <div class="column is-1">
           <router-link
-            :to="{ path: `/store/managebook/${this.store.store_id}` }"
+            :to="{ path: `/store/managebook/${this.books.store_id}` }"
           >
             <button class="button is-light is-medium">
               ยกเลิก
@@ -160,9 +155,11 @@
 </template>
 
 <script>
+import axios from "@/plugins/axios";
 
 export default {
   name: "Home",
+  props: ["user"],
   data() {
     return {
       search: "",
@@ -177,16 +174,45 @@ export default {
       countArrayImage: 0,
       bookDiscount: 0,
       bookId: "",
-      store: "",
+      store_id: "",
       selectMainId: null,
+      books: '',
     };
   },
 
   mounted() {
-    
+    this.getImageForEdit(this.$route.params.bookId);
+    this.getDataOfBook(this.$route.params.bookId);
+    this.getStore()
   },
   methods: {
-    
+    async getDataOfBook(id) {
+       console.log(id);
+        await axios
+        .get(`http://localhost:3000/book/detail/${id}`)
+        .then((response) => {
+          console.log(response.data)
+          this.books = response.data
+        })
+        .catch((error) => {
+        console.log("error")
+          this.error = error.response.data.message;
+        });
+         //
+          this.bookId = this.books.id;
+          this.nameBook = this.books.book_name;
+          this.bookDescription = this.books.book_description;
+          this.bookCategory = this.books.book_category;
+          this.bookCount = this.books.book_count;
+          this.bookPrice = this.books.book_price;
+          this.bookType = this.books.book_type;
+          this.bookDiscount = this.books.book_discount;
+          //this.selectMainId = this.listImageBook.filter(
+          //  (x) => x.main === 1
+         // )[0].image_id;
+
+          this.store_id = this.books.store_id    
+    },
   },
 };
 </script>
