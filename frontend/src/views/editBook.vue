@@ -200,12 +200,60 @@ export default {
     this.getImageForEdit(this.$route.params.bookId);
     this.getDataOfBook(this.$route.params.bookId);
     this.getStore()
-
-    // this.getImageForEdit(this.$route.params.bookId)
-    // this.getDataStore(this.$route.params.id);
-    // this.getComments(this.$route.params.id);
   },
   methods: {
+  
+    selectImages(event) {
+      //   console.log(URL.createObjectURL(event.target.files[0]));
+      this.images = event.target.files;
+    },
+    getImageForEdit(id) {
+      axios
+        .get(`http://localhost:3000/book/detail/${id}/image`)
+        .then((response) => {
+          this.listImageBook = response.data;
+        })
+        .catch((error) => {
+          this.error = error.response.data.message;
+        });
+    },
+    submit() {
+      this.$v.$touch();
+      console.log(this.$v.$invalid);
+
+      // เช็คว่าในฟอร์มไม่มี error
+      if ((!this.$v.$invalid) && !this.checkpic) {
+      console.log("----");
+      let formData = new FormData();
+      formData.append("book_name", this.nameBook);
+      formData.append("book_description", this.bookDescription);
+      formData.append("book_type", this.bookType);
+      formData.append("book_category", this.bookCategory);
+      formData.append("book_count", this.bookCount);
+      formData.append("book_price", this.bookPrice);
+      formData.append("book_discount", this.bookDiscount);
+      formData.append("store_id", this.books.store_id);
+
+      this.images.forEach((image) => {
+        console.log(image);
+        formData.append("myImage", image);
+      });
+
+      axios
+        .put(`http://localhost:3000/store/editbook/${this.bookId}`, formData)
+        .then((res) => {
+          alert("update complete");
+          this.$router.push({
+            path: `/store/managebook/${this.books.store_id}`,
+          });
+        })
+        .catch((err) => {
+          alert(err.response.data.details.message);
+        });
+      }else{
+        alert('ตรวจสอบว่าอินพุดถูกต้อง')
+      }
+    },
     async getDataOfBook(id) {
        console.log(id);
         await axios
@@ -226,9 +274,28 @@ export default {
           this.bookPrice = this.books.book_price;
           this.bookType = this.books.book_type;
           this.bookDiscount = this.books.book_discount;
-          this.store_id = this.books.store_id    
+          this.store_id = this.books.store_id
     },
-
+    searchBooks() {
+      console.log("search");
+    },
+    imagePath(file_path) {
+      if (file_path) {
+        return "http://localhost:3000/" + file_path;
+      } else {
+        return "https://bulma.io/images/placeholders/640x360.png";
+      }
+    },
+    showSelectImage(image) {
+      return URL.createObjectURL(image);
+    },
+    getStore(){
+      axios.get(`/store/${this.user.account_id}`).then((response) => {
+        this.store = response.data
+      }).catch((err) =>{
+        console.log(err)
+      })
+    },
   },
   validations: {
     nameBook: {
