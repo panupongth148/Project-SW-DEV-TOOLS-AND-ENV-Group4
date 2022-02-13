@@ -7,96 +7,123 @@
           <label class="label is-size-5">ชื่อหนังสือ</label>
           <input
             class="input mt-1"
-            v-model="nameBook"
+            v-model="$v.nameBook.$model"
+            :class="{ 'is-danger': $v.nameBook.$error }"
           />
         </div>
       </div>
+      <template v-if="$v.nameBook.$error" class="my-1">
+        <p class="help is-danger" v-if="!$v.nameBook.required">
+          โปรดใส่ชื่อหนังสือ
+        </p>
+      </template>
       <div class="columns">
         <div class="column is-12">
           <label class="label is-size-5">รายละเอียดหนังสือ</label>
+          <!-- <input class="input mt-1" v-model="bookDescription"> -->
           <textarea
             class="textarea"
-            v-model="bookDescription"
+            v-model="$v.bookDescription.$model"
+            :class="{ 'is-danger': $v.bookDescription.$error }"
           ></textarea>
         </div>
       </div>
+      <template v-if="$v.bookDescription.$error" class="my-1">
+        <p class="help is-danger" v-if="!$v.bookDescription.required">
+          โปรดใส่รายละเอียด
+        </p>
+        <p class="help is-danger" v-if="!$v.bookDescription.minLength">
+          โปรดใส่รายละเอียดเกิน 15 อักษร
+        </p>
+      </template>
       <div class="columns">
         <div class="column is-12">
           <label class="label is-size-5">ชนิดหนังสือ</label>
-          <div class="select">
-            <select v-model="bookType">
+          <!-- <input class="input mt-1" v-model="bookDescription"> -->
+          <!-- <textarea class="textarea" v-model="bookDescription"></textarea> -->
+          <div class="select" :class="{ 'is-danger': $v.bookType.$error }">
+            <select v-model="$v.bookType.$model">
               <option value="book">หนังสือ</option>
               <option value="magazine">นิตยสาร</option>
             </select>
           </div>
         </div>
       </div>
+      <template v-if="$v.bookType.$error" class="my-1">
+        <p class="help is-danger" v-if="!$v.bookDescription.required">
+          โปรดเลือกหัวข้อชนิดหนังสือ
+        </p>
+      </template>
       <div class="columns">
         <div class="column is-12">
           <label class="label is-size-5">หมวดหมู่หนังสือ</label>
+          <!-- <input class="input mt-1" v-model="bookDescription"> -->
           <input
             class="input mt-1"
-            v-model="bookCategory"
+            v-model="$v.bookCategory.$model"
+            :class="{ 'is-danger': $v.bookCategory.$error }"
           />
+        </div>
+      </div>
+      <p class="help">โปรดใส่ชื่อหมวดตามจริงหากพบจะทำการลงโทษ</p>
+      <template v-if="$v.bookCategory.$error" class="my-1">
+        <p class="help is-danger" v-if="!$v.bookCategory.required">
+          โปรดใส่หมวดหมู่หนังสือ
+        </p>
+        <p class="help is-danger" v-if="!$v.bookCategory.maxLength">
+          ตัวอักษรเกิน 45 ตัวอักษร
+        </p>
+      </template>
+      <div class="columns">
+        <div class="column is-4">
+          <label class="label is-size-5">ราคาหนังสือ</label>
+          <!-- <input class="input mt-1" v-model="bookDescription"> -->
+          <input class="input mt-1" v-model="$v.bookPrice.$model" :class="{ 'is-danger': $v.bookPrice.$error }"/>
+        </div>
+        <div class="column is-4">
+          <label class="label is-size-5">จำนวน</label>
+          <!-- <input class="input mt-1" v-model="bookDescription"> -->
+         <input class="input mt-1" v-model="$v.bookCount.$model" :class="{ 'is-danger': $v.bookCount.$error }"/>
+        </div>
+        <div class="column is-4">
+          <label class="label is-size-5">ราคาที่ลด</label>
+          <!-- <input class="input mt-1" v-model="bookDescription"> -->
+          <input class="input mt-1" v-model="$v.bookDiscount.$model" :class="{ 'is-danger': $v.bookDiscount.$error }"/>
         </div>
       </div>
       <div class="columns">
         <div class="column is-4">
-          <label class="label is-size-5">ราคาหนังสือ</label>
-          <input class="input mt-1" v-model="bookPrice" />
+          <template v-if="$v.bookPrice.$error" >
+        <p class="help is-danger" v-if="!$v.bookPrice.required">
+          โปรดใส่ราคา
+        </p>
+        <p class="help is-danger" v-if="!$v.bookPrice.numeric">
+          โปรดใส่เป็นตัวเลข
+        </p>
+      </template>
         </div>
         <div class="column is-4">
-          <label class="label is-size-5">จำนวน</label>
-          <input class="input mt-1" v-model="bookCount" />
+         <template v-if="$v.bookCount.$error" >
+        <p class="help is-danger" v-if="!$v.bookCount.required">
+          โปรดใส่จำนวน
+        </p>
+        <p class="help is-danger" v-if="!$v.bookCount.numeric">
+          โปรดใส่เป็นตัวเลข
+        </p>
+      </template>
         </div>
         <div class="column is-4">
-          <label class="label is-size-5">ราคาที่ลด</label>
-          <input class="input mt-1" v-model="bookDiscount" />
+         <template v-if="$v.bookDiscount.$error" >
+        <p class="help is-danger" v-if="!$v.bookDiscount.numeric">
+          โปรดใส่เป็นตัวเลข
+        </p>
+      </template>
         </div>
       </div>
       <div class="columns">
         <div class="column is-12">
-          <div v-if="listImageBook.length > 0" class="columns is-multiline">
-            <div
-              v-for="image in listImageBook"
-              :key="image.image_id"
-              class="column is-one-quarter"
-            >
-              <div class="card">
-                <div class="card-image">
-                  <figure class="image">
-                    <img
-                      :src="'./' + image.image_source"
-                      alt="Placeholder image"
-                      height="100%"
-                    />
-                  </figure>
-                </div>
-                <footer class="card-footer">
-                  <a
-                    @click="deleteCurrentImage(image.image_id)"
-                    class="card-footer-item has-text-danger"
-                    >Delete</a
-                  >
-                  <span
-                    @click="selectMainId = image.image_id"
-                    class="icon card-footer-item"
-                  >
-                    <i
-                      v-if="selectMainId === image.image_id"
-                      class="fas fa-star mt-5"
-                    ></i>
-                    <i v-else class="far fa-star mt-5"></i>
-                  </span>
-                </footer>
-              </div>
-            </div>
-          </div>
-          <div class="control">
-            <button @click="updateMainImage()" class="button is-link mb-2">
-              Update Main
-            </button>
-          </div>
+          
+          
 
           <h1 class="is-size-4">New Image</h1>
           <input
@@ -107,33 +134,14 @@
             @change="selectImages"
           />
 
-          <div v-if="images" class="columns is-multiline">
-            <div
-              v-for="(image, index) in images"
-              :key="image.id"
-              class="column is-one-quarter"
-            >
-              <div class="card">
-                <div class="card-image">
-                  <figure class="image is-4by3">
-                    <img
-                      :src="showSelectImage(image)"
-                      alt="Placeholder image"
-                    />
-                  </figure>
-                </div>
-                <footer class="card-footer">
-                  <a
-                    @click="deleteSelectImage(index)"
-                    class="card-footer-item has-text-danger"
-                    >Delete</a
-                  >
-                </footer>
-              </div>
-            </div>
-          </div>
+          
         </div>
       </div>
+      <template v-if="checkpic">
+        <p class="help is-danger is-size-4">
+          รูปภาพเกิน 5 รูป
+        </p>
+      </template>
       <div class="columns">
         <div class="column is-1 is-offset-10">
           <button class="button is-primary is-medium" @click="submit()">
@@ -157,6 +165,13 @@
 <script>
 import axios from "@/plugins/axios";
 
+import {
+  required,
+  minLength,
+  maxLength,
+  numeric,
+} from "vuelidate/lib/validators";
+
 export default {
   name: "Home",
   props: ["user"],
@@ -174,16 +189,21 @@ export default {
       countArrayImage: 0,
       bookDiscount: 0,
       bookId: "",
-      store_id: "",
+      store_id: '',
       selectMainId: null,
       books: '',
     };
   },
+  components: {},
 
   mounted() {
     this.getImageForEdit(this.$route.params.bookId);
     this.getDataOfBook(this.$route.params.bookId);
     this.getStore()
+
+    // this.getImageForEdit(this.$route.params.bookId)
+    // this.getDataStore(this.$route.params.id);
+    // this.getComments(this.$route.params.id);
   },
   methods: {
     async getDataOfBook(id) {
@@ -198,7 +218,6 @@ export default {
         console.log("error")
           this.error = error.response.data.message;
         });
-         //
           this.bookId = this.books.id;
           this.nameBook = this.books.book_name;
           this.bookDescription = this.books.book_description;
@@ -207,12 +226,42 @@ export default {
           this.bookPrice = this.books.book_price;
           this.bookType = this.books.book_type;
           this.bookDiscount = this.books.book_discount;
-          //this.selectMainId = this.listImageBook.filter(
-          //  (x) => x.main === 1
-         // )[0].image_id;
-
           this.store_id = this.books.store_id    
     },
+
   },
+  validations: {
+    nameBook: {
+      required: required,
+    },
+    bookDescription: {
+      required: required,
+      min: minLength(15),
+    },
+    bookType: {
+      required: required,
+    },
+    bookCategory: {
+      required: required,
+      maxLength: maxLength(45),
+    },
+    bookPrice: {
+      required,
+      numeric: numeric,
+    },
+    bookCount: {
+      required,
+      numeric: numeric,
+    },
+    bookDiscount: {
+      numeric: numeric,
+    },
+  },
+  computed : {
+    checkpic(){
+      
+      return (this.images.length + this.listImageBook.length) > 5
+    }
+  }
 };
 </script>
