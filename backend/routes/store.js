@@ -57,11 +57,11 @@ router.get("/store/managebook/:id", async function (req, res, next) {
 /* update book api */
 router.put(
   "/store/editbook/:id",
-  upload.array("imageBook", 5),
+  upload.array("myImage", 5),
   async (req, res, next) => {
     const file = req.files;
     let pathArray = [];
-
+    console.log(req.body)
     if (!file) {
       const error = new Error("Please upload a file");
       error.httpStatusCode = 400;
@@ -75,6 +75,7 @@ router.put(
     const book_category = req.body.book_category;
     const book_discount = req.body.book_discount;
     const book_description = req.body.book_description;
+    const store_id = req.body.store_id
     // const imageBook = req.body.imageBook;
     // let discountPrice = req.body.bookDiscount;
     // console.log(discountPrice);
@@ -85,7 +86,7 @@ router.put(
 
     try {
       // console.log(content)
-
+    
       if (file.length > 0) {
         let image;
         req.files.forEach((file, index) => {
@@ -105,11 +106,13 @@ router.put(
           book_category: book_category,
           book_discount: book_discount,
           book_reccommend: 0,
-          store_id: req.params.storeId,
+          store_id: store_id,
           image: image
         }
         let id = req.params.id;
         console.log(id)
+        console.log("ID Params : ")
+        console.log(req.params.id)
         console.log(bookobj)
         await firebase
           .firestore()
@@ -130,6 +133,8 @@ router.put(
         }
         let id = req.params.id;
         console.log(id)
+        console.log("ID Params : ")
+        console.log(req.params.id)
         console.log(bookobj)
         await firebase
           .firestore()
