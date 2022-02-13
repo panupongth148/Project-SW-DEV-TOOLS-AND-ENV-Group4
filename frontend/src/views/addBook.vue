@@ -78,10 +78,12 @@
 </template>
 
 <script>
+import axios from "@/plugins/axios";
 import UploadImages from "vue-upload-drop-images";
 
 export default {
   name: "Home",
+  props: ["user"],
   data() {
     return {
       search: "",
@@ -101,11 +103,51 @@ export default {
   components: {
     UploadImages,
   },
-
   mounted() {
-    
+    this.storeId = this.$route.params.storeId;
   },
   methods: {
+    handleImages(files) {
+      this.imageBook = files
+    },
+    submit() {
+      if (!this.checkpic) {
+        let formData = new FormData();
+
+        formData.append("book_name", this.nameBook);
+        formData.append("book_description", this.bookDescription);
+        formData.append("book_type", this.bookType);
+        formData.append("book_category", this.bookCategory);
+        formData.append("book_count", this.bookCount);
+        formData.append("book_price", this.bookPrice);
+        formData.append("store_id", this.storeId);
+        formData.append("book_discount", 0);
+
+        this.imageBook.forEach((image) => {
+          formData.append("myImage", image);
+        });
+
+        axios
+          .post(`http://localhost:3000/store/addbook/${this.storeId}`, formData)
+          .then(() => {
+            alert("ลงทะเบียนสำเร็จ");
+            this.$router.push({ path: `/store/managebook/${this.storeId}` });
+          })
+          .catch((err) => {
+            alert(err.response.data.details.message);
+          });
+      } else {
+        alert("โปรดดูว่าใส่ข้อมูลถูกต้องหรือไม่")
+      }
+    },
+
+    imagePath(file_path) {
+      if (file_path) {
+        return "http://localhost:3000/" + file_path;
+      } else {
+        return "https://bulma.io/images/placeholders/640x360.png";
+      }
+    },
     
   },
 };
