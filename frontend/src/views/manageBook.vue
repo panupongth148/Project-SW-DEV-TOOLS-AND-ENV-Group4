@@ -15,7 +15,7 @@
               <figure class="image">
                 <img
                   style="height: 320px; width: 60%"
-                  :src="imagePath(book.image_source)"
+                  :src="imagePath(book.image)"
                   alt="Placeholder image"
                 />
               </figure>
@@ -25,12 +25,12 @@
             </div>
             <div class="column is-2 mt-2">
               <router-link
-                :to="{ name: 'editBook', params: { bookId: book.book_id } }"
+                :to="{ name: 'editBook', params: { bookId: book.id } }"
                 > <label class="label has-text-link"><u>แก้ไขสินค้า</u></label> </router-link
               >
             </div>
             <div class="column is-1 mt-1">
-              <button class="button" @click="deleteBook(book.book_id)">
+              <button class="button" @click="deleteBook(book.id, index)">
                 <label class="label">ลบสินค้า</label>
               </button>
             </div>
@@ -64,10 +64,12 @@ export default {
   },
 
   mounted() {
+    console.log("in mounted")
     this.getBookOfStore(this.$route.params.storeId);
   },
   methods: {
     getBookOfStore(id) {
+    console.log(id)
       axios
         .get(`http://localhost:3000/store/managebook/${id}`)
         .then((response) => {
