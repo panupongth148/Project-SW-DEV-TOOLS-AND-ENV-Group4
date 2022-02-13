@@ -85,6 +85,29 @@ router.post("/addBook/:storeId", upload.array("myImage", 5), async function (req
     }
   }
 );
-
+// Book detail
+router.get("/book/detail/:bookId", async function (req, res) {
+  console.log(req.params.bookId);
+  console.log("in book detail api")
+  let bookinfo;
+  try {
+   const snapshot = await firebase.firestore().collection('book').where(firebase.firestore.FieldPath.documentId(), '==' , req.params.bookId ).get();
+    // console.log(snapshot);
+    if (snapshot.empty) {
+      console.log('No matching documents.');
+      return;
+    }  
+    let idDoc;
+    snapshot.forEach(doc => {
+      idDoc = doc.id
+      bookinfo = doc.data()
+    });
+    bookinfo.id = idDoc
+    return res.send(bookinfo);    
+  } catch(err) {
+    console.log(err)
+    return res.status(500).json(err);
+  };
+});
 
 exports.router = router;
