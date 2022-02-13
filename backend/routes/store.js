@@ -55,6 +55,7 @@ router.get("/store/managebook/:id", async function (req, res, next) {
 });
 
 /* update book api */
+
 router.put(
   "/store/editbook/:id",
   upload.array("myImage", 5),
