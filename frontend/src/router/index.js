@@ -12,7 +12,6 @@ const routers = [
   {
     path: '/store/managebook/:storeId',
     name: 'manageStore',
-    meta: { login: true },
     component: () => import('../views/manageBook.vue')
   },
   {
