@@ -99,10 +99,10 @@ router.get("/store/:id", async function (req, res, next) {
 router.delete(
   "/store/managebook/deletebook/:id",
   async function (req, res, next) {
-    console.log(req.params.id);
+    // console.log(req.params.id);
     try {
       let id = req.params.id
-      console.log(id)
+      // console.log(id)
       await firebase
           .firestore()
           .collection("book")
@@ -123,7 +123,7 @@ router.put(
   async (req, res, next) => {
     const file = req.files;
     let pathArray = [];
-    console.log(req.body)
+    // console.log(req.body)
     if (!file) {
       const error = new Error("Please upload a file");
       error.httpStatusCode = 400;
@@ -172,10 +172,10 @@ router.put(
           image: image
         }
         let id = req.params.id;
-        console.log(id)
-        console.log("ID Params : ")
-        console.log(req.params.id)
-        console.log(bookobj)
+        // console.log(id)
+        // console.log("ID Params : ")
+        // console.log(req.params.id)
+        // console.log(bookobj)
         await firebase
           .firestore()
           .collection("book")
@@ -194,10 +194,10 @@ router.put(
           
         }
         let id = req.params.id;
-        console.log(id)
-        console.log("ID Params : ")
-        console.log(req.params.id)
-        console.log(bookobj)
+        // console.log(id)
+        // console.log("ID Params : ")
+        // console.log(req.params.id)
+        // console.log(bookobj)
         await firebase
           .firestore()
           .collection("book")
@@ -206,10 +206,11 @@ router.put(
       
       }
 
-      
-      res.send("success!");
+      console.log("success")
+      res.status(200).json("success!");
     } catch (err) {
-      
+      console.log(err)
+      res.send(err)
       next(err);
     } finally {
       console.log("finally");
