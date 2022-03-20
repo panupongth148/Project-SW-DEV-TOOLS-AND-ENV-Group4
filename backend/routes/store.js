@@ -21,7 +21,6 @@ var storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-/* GetBooksfromstore api */
 router.get("/store/managebook/:id", async function (req, res, next) {
   // const conn = await pool.getConnection();
   // await conn.beginTransaction();
@@ -41,6 +40,7 @@ router.get("/store/managebook/:id", async function (req, res, next) {
       bookInStore.push(bookonce);
     });
     // bookInStore.book_id = idcollection
+    
     res.json({
       book: bookInStore,
       error: null,
@@ -48,13 +48,74 @@ router.get("/store/managebook/:id", async function (req, res, next) {
   } catch (err) {
     console.log("error");
     return res.status(500).json(err);
-  } finally {
-    console.log("finally");
-    // conn.release();
+  }
+});
+/* delete book api */
+router.delete(
+  "/store/managebook/deletebook/:id",
+  async function (req, res, next) {
+    console.log(req.params.id);
+    try {
+      let id = req.params.id
+      console.log(id)
+      await firebase
+          .firestore()
+          .collection("book")
+          .doc(id).delete();
+      
+      res.json("success");
+    } catch (error) {
+      console.log("error");
+      res.status(500).json(error);
+    }
+  }
+);
+
+router.get("/store/:id", async function (req, res, next) {
+  let storeData;
+  try {
+    const snapshot = await firebase
+      .firestore()
+      .collection("store")
+      .where("account_id", "==", req.params.id)
+      .get();
+    await snapshot.forEach((res) => {
+      // idcollection = res.id;
+      storeData = res.data();
+    });
+    // bookInStore.book_id = idcollection
+    
+    res.json({
+      storeData: storeData,
+      error: null,
+    });
+  } catch (err) {
+    console.log("error");
+    return res.status(500).json(err);
   }
 });
 
-/* update book api */
+/* delete book api */
+router.delete(
+  "/store/managebook/deletebook/:id",
+  async function (req, res, next) {
+    console.log(req.params.id);
+    try {
+      let id = req.params.id
+      console.log(id)
+      await firebase
+          .firestore()
+          .collection("book")
+          .doc(id).delete();
+      
+      res.json("success");
+    } catch (error) {
+      console.log("error");
+      res.status(500).json(error);
+    }
+  }
+);
+
 
 router.put(
   "/store/editbook/:id",
@@ -156,26 +217,4 @@ router.put(
     }
   }
 );
-
-/* delete book api */
-router.delete(
-  "/store/managebook/deletebook/:id",
-  async function (req, res, next) {
-    console.log(req.params.id);
-    try {
-      let id = req.params.id
-      console.log(id)
-      await firebase
-          .firestore()
-          .collection("book")
-          .doc(id).delete();
-
-      res.json("success");
-    } catch (error) {
-      console.log("error");
-      res.status(500).json(error);
-    }
-  }
-);
-
 exports.router = router;
