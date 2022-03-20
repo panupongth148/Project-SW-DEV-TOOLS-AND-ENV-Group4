@@ -26,6 +26,7 @@
               class="input is-success"
               type="text"
               placeholder="Input your username"
+              data-test="username"
             />
           </div>
         </div>
@@ -37,12 +38,13 @@
               class="input is-success"
               type="password"
               placeholder="Input your password"
+              data-test="password"
             />
           </div>
         </div>
         <br />
         <div class="control has-text-centered">
-          <button class="button is-link" @click="submit()">Submit</button>
+          <button class="button is-link" data-test="submitLogin" @click="submit()">Submit</button>
         </div>
         <p class="my-3">
           Don't have an account yet?
@@ -68,7 +70,24 @@ export default {
   methods: {
     submit() {
       console.log("Log in");
-      this.$router.push({ path: `/store/managebook/1` });
+      const data = {
+        username: this.username,
+        password: this.password,
+      };
+      axios
+        .post("https://immense-mesa-76111.herokuapp.com/account/login/", data)
+        .then((res) => {
+          const token = res.data.token;
+          localStorage.setItem("token", token);
+          console.log("success");
+          this.$emit("auth-change");
+          this.$router.push({ path: "/" });
+        })
+        .catch((error) => {
+          this.error = error.response.data.substring(6);
+
+          console.log(error.response.data);
+        });
     },
   },
 };

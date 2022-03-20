@@ -32,19 +32,71 @@
           </router-link>
         </div>
       </div>
-      
+      <div v-if="user" class="column is-4 is-offset-1">
+        <div class="columns mt-4">
+          <div class="column is-4 mt-2 navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              <figure class="image is-24x24 m-auto">
+                <img class="is-rounded" :src="imagePath(user.image)" />
+              </figure>
+              <span class="pl-3"
+                >{{ user.first_name }} {{ user.last_name }}</span
+              >
+            </a>
+            <div class="navbar-dropdown">
+              <router-link
+                :to="{ name: 'user', params: { id: this.user.account_id } }"
+              >
+                <a class="navbar-item">Profile</a>
+              </router-link>
+              <router-link
+                v-if="user.type === 'customer'"
+                :to="{
+                  name: 'myOrders',
+                  params: { id: this.user.account_id },
+                }"
+              >
+                <a class="navbar-item">My order</a>
+              </router-link>
+              <a class="navbar-item" @click="logout()">Log out</a>
+            </div>
+          </div>
+          <div class="column is-1 mt-1">
+            <router-link
+              :to="{ name: 'cart', params: { id: this.user.account_id } }"
+              v-if="user.type === 'customer'"
+            >
+              <p class="control ml-3">
+                <a><i class="fas fa-shopping-cart"></i></a>
+              </p>
+            </router-link>
+            <router-link
+              :to="{
+                name: 'manageStore',
+                params: { storeId: this.store.store_id },
+              }"
+              v-if="user.type === 'seller'"
+            >
+              <p class="control ml-3">
+                <a class="button" data-test="store">หน้าร้านค้า</a>
+              </p>
+            </router-link>
+          </div>
+        </div>
+      </div>
+
       <div v-if="!user" class="column is-2 is-offset-1 mt-4">
         <div class="field has-addons mt-4" v-if="!user">
-          <!-- <router-link to="/account/register"> -->
+          <router-link to="/account/register">
             <p class="control ml-3 has-text-black-bis">
               <a>สมัครสมาชิก</a>
             </p>
-          <!-- </router-link>
-          <router-link to="/account/login"> -->
+          </router-link>
+          <router-link to="/account/login" data-test="login">
             <p class="control ml-3 has-text-black-bis">
               <a>เข้าสู่ระบบ</a>
             </p>
-          <!-- </router-link> -->
+          </router-link>
           <router-link>
             <p class="control ml-3">
               <a><i class="fas fa-shopping-cart"></i></a>
@@ -114,6 +166,7 @@
 
     <router-view
       :key="$route.fullPath"
+      @auth-change="onAuthChange"
       :user="user"
     />
 
@@ -130,8 +183,9 @@
 <script>
 import axios from "@/plugins/axios";
 
+// @ is an alias to /src
 export default {
-  name: 'App',
+  name: "Home",
   data() {
     return {
       search: "",
@@ -142,33 +196,22 @@ export default {
       store: "",
     };
   },
-  mounted() {
-    this.onAuthChange();
-    this.getBlogs();
+
+  async mounted () {
+    await this.onAuthChange();
+    await this.getBlogs();
+    
   },
   methods: {
-    getBlogs() {
-      axios
-        .get("/getallbook", {
-          params: {
-            search: this.search,
-            type: this.type,
-          },
-        })
-        .then((response) => {
-          this.blogs = response.data;
-          if (this.user.type != 'customer') {
-            this.getStore()
-          }
-          
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    async getBlogs() {
+      console.log("this.getstore");
     },
-    getStore() {
-      axios.get(`/store/${this.user.account_id}`).then((response) =>{
-        this.store = response.data
+    async getStore(){
+      console.log("get store")
+      await axios.get(`/store/${this.user.account_id}`).then((response) =>{
+        this.store = response.data.storeData
+        console.log("in get store")
+        console.log(this.store);
       }).catch((err) =>{
         console.log(err)
       })
@@ -176,21 +219,27 @@ export default {
     imagePath(file_path) {
       if (file_path) {
         console.log(file_path);
-        return "http://localhost:3000/" + file_path;
+        return "https://immense-mesa-76111.herokuapp.com/" + file_path;
       } else {
         return "https://bulma.io/images/placeholders/640x360.png";
       }
     },
     onAuthChange() {
       const token = localStorage.getItem("token");
-
+      console.log(token)
       if (token) {
         this.getUser();
       }
     },
-    getUser() {
-      axios.get("/user/me").then((res) => {
+    async getUser() {
+      console.log("getUser")
+      await axios.get("/user/me").then((res) => {
         this.user = res.data;
+        console.log(this.user)
+      }).then((val) => {
+        if(this.user.type != 'customer'){
+            this.getStore()
+          }
       });
     },
     logout() {
@@ -202,5 +251,6 @@ export default {
       this.type = type;
     },
   },
-}
+};
 </script>
+

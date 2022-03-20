@@ -27,6 +27,6 @@ app.use(bookRouter.router)
 app.use(storeRouter.router)
 app.use(userRouter.router)
 
-app.listen(port, () => {
+module.exports = app.listen(port, () => {
   console.log(`Example app listening at http://localhost:3000`)
 })

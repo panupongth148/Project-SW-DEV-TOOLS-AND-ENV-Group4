@@ -26,12 +26,12 @@
             <div class="column is-2 mt-2">
               <router-link
                 :to="{ name: 'editBook', params: { bookId: book.id } }"
-                > <label class="label has-text-link"><u>แก้ไขสินค้า</u></label> </router-link
+                > <label class="label has-text-link" :data-test="'editBook' + index"><u>แก้ไขสินค้า</u></label> </router-link
               >
             </div>
             <div class="column is-1 mt-1">
               <button class="button" @click="deleteBook(book.id, index)">
-                <label class="label">ลบสินค้า</label>
+                <label class="label" :data-test="'deleteBook' + index">ลบสินค้า</label>
               </button>
             </div>
           </div>
@@ -40,7 +40,7 @@
           <div class="column is-12">
             <button>
               <router-link :to="{ name: 'addBook', params: { storeId: this.$route.params.storeId} }">
-                <label class="label has-text-link">เพิ่มสินค้า</label>
+                <label class="label has-text-link" data-test="addBook">เพิ่มสินค้า</label>
               </router-link>
             </button>
             
@@ -71,7 +71,7 @@ export default {
     getBookOfStore(id) {
     console.log(id)
       axios
-        .get(`http://localhost:3000/store/managebook/${id}`)
+        .get(`https://immense-mesa-76111.herokuapp.com/store/managebook/${id}`)
         .then((response) => {
           this.books = response.data.book;
           console.log(this.books)
@@ -83,7 +83,7 @@ export default {
     imagePath(file_path) {
       
       if (file_path) {
-        return "http://localhost:3000/" + file_path;
+        return "https://immense-mesa-76111.herokuapp.com/" + file_path;
       } else {
         return "https://bulma.io/images/placeholders/640x360.png";
       }
@@ -96,9 +96,9 @@ export default {
     },
     deleteBook(id) {
       let confirmDeleteBook = confirm("Are you sure to delete this book");
-      if (confirmDeleteBook ) {
+      if (confirmDeleteBook) {
         axios
-          .delete(`http://localhost:3000/store/managebook/deletebook/${id}`)
+          .delete(`https://immense-mesa-76111.herokuapp.com/store/managebook/deletebook/${id}`)
           .then(() => {
             location.reload()
           })
