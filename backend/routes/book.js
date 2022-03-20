@@ -32,7 +32,7 @@ const upload = multer({ storage: storage });
 
 router.post("/addBook/:storeId", upload.array("myImage", 5), async function (req, res, next) {
   // router.post("/addBook/:storeId", async function (req, res, next) {
-    console.log("test")
+    console.log("add book test")
     if (req.method == "POST") {
       const file = req.files;
       let pathArray = [];
@@ -40,7 +40,7 @@ router.post("/addBook/:storeId", upload.array("myImage", 5), async function (req
       if (!file) {
         return res.status(400).json({ message: "Please upload a file" });
       }
-
+      
       const book_name = req.body.book_name;
       const book_type = req.body.book_type;
       const book_count = req.body.book_count;
@@ -72,7 +72,7 @@ router.post("/addBook/:storeId", upload.array("myImage", 5), async function (req
         store_id: req.params.storeId,
         image: image
       }
-      console.log(bookobj)
+      // console.log(bookobj)
       try{
       await firebase.firestore()
       .collection("book")

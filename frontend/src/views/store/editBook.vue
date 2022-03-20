@@ -8,6 +8,7 @@
           <input
             class="input mt-1"
             v-model="$v.nameBook.$model"
+            data-test="bookName"
             :class="{ 'is-danger': $v.nameBook.$error }"
           />
         </div>
@@ -24,6 +25,7 @@
           <textarea
             class="textarea"
             v-model="$v.bookDescription.$model"
+            data-test="bookDescription"
             :class="{ 'is-danger': $v.bookDescription.$error }"
           ></textarea>
         </div>
@@ -42,7 +44,7 @@
           <!-- <input class="input mt-1" v-model="bookDescription"> -->
           <!-- <textarea class="textarea" v-model="bookDescription"></textarea> -->
           <div class="select" :class="{ 'is-danger': $v.bookType.$error }">
-            <select v-model="$v.bookType.$model">
+            <select v-model="$v.bookType.$model" data-test="bookType">
               <option value="book">หนังสือ</option>
               <option value="magazine">นิตยสาร</option>
             </select>
@@ -61,6 +63,7 @@
           <input
             class="input mt-1"
             v-model="$v.bookCategory.$model"
+            data-test="bookCategory"
             :class="{ 'is-danger': $v.bookCategory.$error }"
           />
         </div>
@@ -78,12 +81,12 @@
         <div class="column is-4">
           <label class="label is-size-5">ราคาหนังสือ</label>
           <!-- <input class="input mt-1" v-model="bookDescription"> -->
-          <input class="input mt-1" v-model="$v.bookPrice.$model" :class="{ 'is-danger': $v.bookPrice.$error }"/>
+          <input class="input mt-1" v-model="$v.bookPrice.$model" data-test="bookPrice" :class="{ 'is-danger': $v.bookPrice.$error }"/>
         </div>
         <div class="column is-4">
           <label class="label is-size-5">จำนวน</label>
           <!-- <input class="input mt-1" v-model="bookDescription"> -->
-         <input class="input mt-1" v-model="$v.bookCount.$model" :class="{ 'is-danger': $v.bookCount.$error }"/>
+         <input class="input mt-1" v-model="$v.bookCount.$model" data-test="bookCount" :class="{ 'is-danger': $v.bookCount.$error }"/>
         </div>
         <div class="column is-4">
           <label class="label is-size-5">ราคาที่ลด</label>
@@ -144,7 +147,7 @@
       </template>
       <div class="columns">
         <div class="column is-1 is-offset-10">
-          <button class="button is-primary is-medium" @click="submit()">
+          <button class="button is-primary is-medium" data-test="submitEditBook" @click="submit()">
             ยืนยัน
           </button>
         </div>
@@ -200,16 +203,19 @@ export default {
     this.getImageForEdit(this.$route.params.bookId);
     this.getDataOfBook(this.$route.params.bookId);
     this.getStore()
+
+    // this.getImageForEdit(this.$route.params.bookId)
+    // this.getDataStore(this.$route.params.id);
+    // this.getComments(this.$route.params.id);
   },
   methods: {
-  
     selectImages(event) {
       //   console.log(URL.createObjectURL(event.target.files[0]));
       this.images = event.target.files;
     },
     getImageForEdit(id) {
       axios
-        .get(`http://localhost:3000/book/detail/${id}/image`)
+        .get(`https://immense-mesa-76111.herokuapp.com/book/detail/${id}/image`)
         .then((response) => {
           this.listImageBook = response.data;
         })
@@ -219,69 +225,66 @@ export default {
     },
     submit() {
       this.$v.$touch();
-      console.log(this.$v.$invalid);
 
       // เช็คว่าในฟอร์มไม่มี error
       if ((!this.$v.$invalid) && !this.checkpic) {
-      console.log("----");
-      let formData = new FormData();
-      formData.append("book_name", this.nameBook);
-      formData.append("book_description", this.bookDescription);
-      formData.append("book_type", this.bookType);
-      formData.append("book_category", this.bookCategory);
-      formData.append("book_count", this.bookCount);
-      formData.append("book_price", this.bookPrice);
-      formData.append("book_discount", this.bookDiscount);
-      formData.append("store_id", this.books.store_id);
+        console.log("----");
+        let formData = new FormData();
+        formData.append("book_name", this.nameBook);
+        formData.append("book_description", this.bookDescription);
+        formData.append("book_type", this.bookType);
+        formData.append("book_category", this.bookCategory);
+        formData.append("book_count", this.bookCount);
+        formData.append("book_price", this.bookPrice);
+        formData.append("book_discount", this.bookDiscount);
+        formData.append("store_id", this.books.store_id);
 
-      this.images.forEach((image) => {
-        console.log(image);
-        formData.append("myImage", image);
-      });
-
-      axios
-        .put(`http://localhost:3000/store/editbook/${this.bookId}`, formData)
-        .then((res) => {
-          alert("update complete");
-          this.$router.push({
-            path: `/store/managebook/${this.books.store_id}`,
-          });
-        })
-        .catch((err) => {
-          alert(err.response.data.details.message);
+        this.images.forEach((image) => {
+          formData.append("myImage", image);
         });
-      }else{
+
+        axios
+          .put(`https://immense-mesa-76111.herokuapp.com/store/editbook/${this.bookId}`, formData)
+          .then((res) => {
+            alert("update complete");
+            this.$router.push({
+              path: `/store/managebook/${this.books.store_id}`,
+            });
+          })
+          .catch((err) => {
+            alert(err.response.data.details.message);
+          });
+      } else {
         alert('ตรวจสอบว่าอินพุดถูกต้อง')
       }
     },
     async getDataOfBook(id) {
-       console.log(id);
-        await axios
-        .get(`http://localhost:3000/book/detail/${id}`)
+      await axios
+        .get(`https://immense-mesa-76111.herokuapp.com/book/detail/${id}`)
         .then((response) => {
-          console.log(response.data)
           this.books = response.data
         })
         .catch((error) => {
-        console.log("error")
+          console.log("error")
           this.error = error.response.data.message;
         });
-          this.bookId = this.books.id;
-          this.nameBook = this.books.book_name;
-          this.bookDescription = this.books.book_description;
-          this.bookCategory = this.books.book_category;
-          this.bookCount = this.books.book_count;
-          this.bookPrice = this.books.book_price;
-          this.bookType = this.books.book_type;
-          this.bookDiscount = this.books.book_discount;
-          this.store_id = this.books.store_id
+
+      this.bookId = this.books.id;
+      this.nameBook = this.books.book_name;
+      this.bookDescription = this.books.book_description;
+      this.bookCategory = this.books.book_category;
+      this.bookCount = this.books.book_count;
+      this.bookPrice = this.books.book_price;
+      this.bookType = this.books.book_type;
+      this.bookDiscount = this.books.book_discount;
+      this.store_id = this.books.store_id  
     },
     searchBooks() {
       console.log("search");
     },
     imagePath(file_path) {
       if (file_path) {
-        return "http://localhost:3000/" + file_path;
+        return "https://immense-mesa-76111.herokuapp.com/" + file_path;
       } else {
         return "https://bulma.io/images/placeholders/640x360.png";
       }
@@ -326,7 +329,6 @@ export default {
   },
   computed : {
     checkpic(){
-      
       return (this.images.length + this.listImageBook.length) > 5
     }
   }
