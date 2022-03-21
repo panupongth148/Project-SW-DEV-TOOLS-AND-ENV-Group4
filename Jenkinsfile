@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Run component test') {
             steps {
-                sh 'cd backend && npm-com'
+                sh 'cd backend && npm test'
             }
         }
         stage('Deployment') {
