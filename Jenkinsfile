@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Pull code') {
             steps {
-                git branch: 'main', url: 'https://github.com/panupongth148/test_githubCICD'
+                git branch: 'main', url: 'https://github.com/panupongth148/Project-SW-DEV-TOOLS-AND-ENV-Group4'
             }
         }
         stage('Download dependency') {
