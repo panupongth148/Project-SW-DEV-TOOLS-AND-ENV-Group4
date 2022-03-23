@@ -63,10 +63,10 @@ router.delete(
           .collection("book")
           .doc(id).delete();
       
-      res.json("success");
+      res.status(200).json("success");
     } catch (error) {
       console.log("error");
-      res.status(500).json(error);
+      res.status(202).json(error);
     }
   }
 );
@@ -85,37 +85,15 @@ router.get("/store/:id", async function (req, res, next) {
     });
     // bookInStore.book_id = idcollection
     
-    res.json({
+    res.status(200).json({
       storeData: storeData,
       error: null,
     });
   } catch (err) {
     console.log("error");
-    return res.status(500).json(err);
+    return res.status(404).json(err);
   }
 });
-
-/* delete book api */
-router.delete(
-  "/store/managebook/deletebook/:id",
-  async function (req, res, next) {
-    // console.log(req.params.id);
-    try {
-      let id = req.params.id
-      // console.log(id)
-      await firebase
-          .firestore()
-          .collection("book")
-          .doc(id).delete();
-      
-      res.json("success");
-    } catch (error) {
-      console.log("error");
-      res.status(500).json(error);
-    }
-  }
-);
-
 
 router.put(
   "/store/editbook/:id",
@@ -210,7 +188,7 @@ router.put(
       res.status(200).json("success!");
     } catch (err) {
       console.log(err)
-      res.send(err)
+      res.status(404).json(err)
       next(err);
     } finally {
       console.log("finally");

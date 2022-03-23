@@ -12,11 +12,6 @@ pipeline {
                 sh 'cd backend && npm install'
             }
         }
-        stage('Run unit test') {
-            steps {
-                sh 'cd backend && npm test'
-            }
-        }
         stage('Run component test') {
             steps {
                 sh 'cd backend && npm test'
@@ -26,7 +21,7 @@ pipeline {
             steps {
                 dir("backend"){
                     sh 'git add .'
-                    sh 'git commit -m "prepare to deploy'
+                    sh 'git commit -m "prepare to deploy"'
                     sh 'git push heroku master'
                     sh 'heroku open'
                 }
