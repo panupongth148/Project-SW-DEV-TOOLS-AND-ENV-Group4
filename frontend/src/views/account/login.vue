@@ -27,6 +27,7 @@
               type="text"
               placeholder="Input your username"
               data-test="username"
+              data-testid="username"
             />
           </div>
         </div>
@@ -39,12 +40,13 @@
               type="password"
               placeholder="Input your password"
               data-test="password"
+              data-testid="password"
             />
           </div>
         </div>
         <br />
         <div class="control has-text-centered">
-          <button class="button is-link" data-test="submitLogin" @click="submit()">Submit</button>
+          <button class="button is-link" data-test="submitLogin" data-testid="submitLogin" @click="submit()">Submit</button>
         </div>
         <p class="my-3">
           Don't have an account yet?
