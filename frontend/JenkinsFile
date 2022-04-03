@@ -32,15 +32,6 @@ pipeline {
             }
         }
     }
-
-    stage('Deploy frontend') {
-        steps {
-            dir("frontend") {
-                sh 'npm run build'
-                sh 'firebase deploy'
-            }
-        }
-    }
     stage('E2E test') {
         steps {
             echo 'cd frontend && npm run cypress:open'
