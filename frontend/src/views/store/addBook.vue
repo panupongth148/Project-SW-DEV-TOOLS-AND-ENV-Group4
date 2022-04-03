@@ -9,6 +9,7 @@
             class="input mt-1"
             v-model="$v.nameBook.$model"
             data-test="bookName"
+            data-testid="bookName"
             :class="{ 'is-danger': $v.nameBook.$error }"
           />
         </div>
@@ -26,6 +27,7 @@
             class="textarea"
             v-model="$v.bookDescription.$model"
             data-test="bookDescription"
+            data-testid="bookDescription"
             :class="{ 'is-danger': $v.bookDescription.$error }"
           ></textarea>
         </div>
@@ -44,7 +46,7 @@
           <!-- <input class="input mt-1" v-model="bookDescription"> -->
           <!-- <textarea class="textarea" v-model="bookDescription"></textarea> -->
           <div class="select" :class="{ 'is-danger': $v.bookType.$error }">
-            <select v-model="$v.bookType.$model" data-test="bookType">
+            <select v-model="$v.bookType.$model" data-test="bookType" data-testid="bookType">
               <option value="book">หนังสือ</option>
               <option value="magazine">นิตยสาร</option>
             </select>
@@ -60,7 +62,7 @@
         <div class="column is-12">
           <label class="label is-size-5">หมวดหมู่หนังสือ</label>
           <!-- <input class="input mt-1" v-model="bookDescription"> -->
-          <input class="input mt-1" v-model="$v.bookCategory.$model" data-test="bookCategory" :class="{ 'is-danger': $v.bookCategory.$error }"/>
+          <input class="input mt-1" v-model="$v.bookCategory.$model" data-test="bookCategory" data-testid="bookCategory" :class="{ 'is-danger': $v.bookCategory.$error }"/>
         </div>
       </div>
       <p class="help">โปรดใส่ชื่อหมวดตามจริงหากพบจะทำการลงโทษ</p>
@@ -76,12 +78,12 @@
         <div class="column is-6">
           <label class="label is-size-5">ราคาหนังสือ</label>
           <!-- <input class="input mt-1" v-model="bookDescription"> -->
-          <input class="input mt-1" v-model="$v.bookPrice.$model" data-test="bookPrice" :class="{ 'is-danger': $v.bookPrice.$error }"/>
+          <input class="input mt-1" v-model="$v.bookPrice.$model" data-test="bookPrice" data-testid="bookPrice" :class="{ 'is-danger': $v.bookPrice.$error }"/>
         </div>
         <div class="column is-6">
           <label class="label is-size-5">จำนวน</label>
           <!-- <input class="input mt-1" v-model="bookDescription"> -->
-          <input class="input mt-1" v-model="$v.bookCount.$model" data-test="bookCount" :class="{ 'is-danger': $v.bookCount.$error }"/>
+          <input class="input mt-1" v-model="$v.bookCount.$model" data-test="bookCount" data-testid="bookCount" :class="{ 'is-danger': $v.bookCount.$error }"/>
         </div>
       </div>
       <div class="columns my-2">
@@ -117,13 +119,14 @@
             maxError="ไฟล์เกิน 5 ไฟล์"
             uploadMsg="โปรด อัพไฟล์รูปภาพ"
             data-test="bookPicture"
+            data-testid="bookPicture"
           />
         </div>
         <div class="column is-2"></div>
       </div>
       <div class="columns">
         <div class="column is-1 is-offset-10">
-          <button class="button is-primary is-medium" data-test="submitAddBook" @click="submit()">
+          <button class="button is-primary is-medium" data-test="submitAddBook" data-testid="submitAddBook" @click="submit()">
             ยืนยัน
           </button>
         </div>
@@ -175,9 +178,6 @@ export default {
 
   mounted() {
     this.storeId = this.$route.params.storeId;
-    // this.getDataOfBook(this.$route.params.bookId);
-    // this.getDataStore(this.$route.params.id);
-    // this.getComments(this.$route.params.id);
   },
   methods: {
     handleImages(files) {
