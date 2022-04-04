@@ -14,7 +14,17 @@ pipeline {
         }
         stage('Run component test') {
             steps {
-                sh 'cd backend && npm test'
+                sh 'cd backend && npm run test:compo'
+            }
+        }
+        stage('Deployment') {
+            steps {
+               echo "deployment"
+            }
+        }
+        stage('E2E test') {
+            steps {
+               sh "npm run test:e2e"
             }
         }
     }

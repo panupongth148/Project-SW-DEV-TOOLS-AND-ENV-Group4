@@ -1,7 +1,7 @@
 const chai = require("chai");
-const firebase = require('./../db')
+const firebase = require("../../db")
 const chaiHttp = require("chai-http")
-const server = require("../index")
+const server = require("../../index")
 const fs = require('fs')
 const path = require('path');
 chai.should()
