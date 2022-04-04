@@ -4,7 +4,8 @@
   "description": "แบบฝึกหัดสัปดาห์ที่ 9 Express / MySql",
   "main": "index.js",
   "scripts": {
-    "test": "npm run compo",
+    "test:compo": "npm run compo",
+    "test:e2e": "nyc mocha test/E2Etest/test.js --reporter spec",
     "serve": "npx kill-port 3000 && nodemon index.js",
     "start": "node index.js",
     "compo": "nyc mocha test/component/**/*.test.js --reporter spec"
