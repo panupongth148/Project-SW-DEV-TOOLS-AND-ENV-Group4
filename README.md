@@ -30,4 +30,5 @@
 | wiki | การเพิ่มหรือแก้ไขข้อมูลใน wiki  |
 | style | การแก้ไขในส่วนอื่น ๆ ที่ไม่ส่งผลกระทบต่อ code ของ project (white-space, formatting, missing semi-colons etc.)  |
 | fix  | การแก้ไขบัคต่างๆ |
+| delete | ลบไฟล์หรือลบmethod |
 >Ex. refactor: refaactor mainpage code
