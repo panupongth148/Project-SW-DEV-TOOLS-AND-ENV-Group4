@@ -2,10 +2,10 @@ version: "3.8"
 
 services:
   frontend:
-    image: team4/frontend
+    image: panupong148th/team-4-frontend:1.0.0
     ports:
-      - "8080:80"
+      - "80:5300"
   backend:
-    image: team4/backend
+    image: panupong148th/team-4-backend:1.0.0
     ports:
-      - "3000:3000"
+      - "3002:3002"
