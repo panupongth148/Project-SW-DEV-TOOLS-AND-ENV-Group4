@@ -2,7 +2,7 @@
 .env.local
 .env.*.local
 
-
+.nyc_output/
 package-lock.json
 
 # Created by https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,vuejs
