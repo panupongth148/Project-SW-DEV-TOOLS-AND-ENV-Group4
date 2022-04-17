@@ -17,15 +17,13 @@ app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 // routers
-const bookRouter = require('./routes/book')
-const storeRouter = require('./routes/store')
+
+const indexRouter = require('./routes/index')
 const userRouter = require('./routes/user')
 
-app.use(bookRouter.router)
-// app.use(commentRouter.router)
-// app.use(imageRouter.router)
-app.use(storeRouter.router)
+app.use(indexRouter.router)
 app.use(userRouter.router)
+
 
 module.exports = app.listen(port, () => {
   console.log(`Example app listening at http://localhost:3000`)
