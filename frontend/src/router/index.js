@@ -24,13 +24,13 @@ const routes = [
   {
     path: '/store/managebook/:storeId',
     name: 'manageStore',
-    component: () => import('../views/store/managebook.vue')
+    component: () => import('../views/store/manageBook.vue')
   },
   {
     path: '/store/editbook/:bookId',
     name: 'editBook',
 
-    component: () => import('../views/store/editbook.vue')
+    component: () => import('../views/store/editBook.vue')
   },
   {
     path: '/store/addbook/:storeId',

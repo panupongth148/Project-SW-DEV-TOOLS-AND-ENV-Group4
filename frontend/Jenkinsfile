@@ -1,26 +1,40 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Pull code') {
-            steps {
-                git branch: 'main', url: 'https://github.com/panupongth148/Project-SW-DEV-TOOLS-AND-ENV-Group4'
+    stage('Pull Code') {
+        steps {
+            git branch: 'main', url: 'https://github.com/panupongth148/Project-SW-DEV-TOOLS-AND-ENV-Group4.git'
             }
         }
-        stage('Download dependency') {
-            steps {
-                sh 'cd frontend && npm install'
-            }
-        }
-        stage('Run unit test') {
-            steps {
-                sh 'cd frontend && npm run test:unit'
-            }
-        }
-        stage('Run component test') {
-            steps {
-                sh 'cd frontend && npm test:com'
+        stage('Download Dependencies') {
+    steps {
+        dir("frontend") {
+            sh 'cd frontend && npm install'
             }
         }
     }
-}
+     stage('Units Testing') {
+    steps {
+        dir("frontend/cypress") {
+            sh 'cd frontend && npm unit-test'
+            }
+        }
+    }
+        stage('Run component test') {
+            steps {
+                sh 'cd backend && npm test'
+            }
+        }
+        stage('Conponents Testing') {
+    steps {
+        dir("frontend/cypress") {
+            sh 'cd frontend && npm com-test'
+            }
+        }
+    }
+    stage('E2E test') {
+        steps {
+            echo 'cd frontend && npm run cypress:open'
+        }
+    }
+    }
