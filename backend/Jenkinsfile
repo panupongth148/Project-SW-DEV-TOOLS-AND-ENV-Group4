@@ -12,20 +12,36 @@ pipeline {
                 sh 'cd backend && npm install'
             }
         }
+        stage('Run unit test') {
+            steps {
+                   echo 'cd backend && npm run test'
+            }
+        }
         stage('Run component test') {
             steps {
                 sh 'cd backend && npm run test:compo'
             }
         }
-        stage('Deployment') {
+        stage("Deploy") {
             steps {
-               echo "deployment"
+                withCredentials([
+                    string(credentialsId: 'TEAM4_USERNAME', variable: 'TEAM4_USERNAME'), 
+                    string(credentialsId: 'TEAM4_BACKEND_HOST', variable: 'TEAM4_BACKEND_HOST'), 
+                    string(credentialsId: 'TEAM4_HOST_PASSWORD', variable: 'TEAM4_HOST_PASSWORD')])
+                {
+                    script{
+                        def remote = [:]
+                        remote.name = TEAM4_USERNAME
+                        remote.host = TEAM4_BACKEND_HOST
+                        remote.user = TEAM4_USERNAME
+                        remote.password = TEAM4_HOST_PASSWORD
+                        remote.allowAnyHosts = true
+                        sshCommand remote: remote, command: "git clone -b main https://github.com/panupongth148/Project-SW-DEV-TOOLS-AND-ENV-Group4.git team-4-backend"
+                        sshCommand remote: remote, command: "docker-compose -f team-4-backend/docker-compose-build.yml up -d backtend"
+                        sshCommand remote: remote, command: "rm -r team-4-backend"
+                    }
+                }
             }
-        }
-        stage('E2E test') {
-            steps {
-               sh "npm run test:e2e"
             }
-        }
     }
 }
