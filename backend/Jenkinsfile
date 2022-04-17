@@ -27,5 +27,14 @@ pipeline {
                echo "E2e test"
             }
         }
+        stage('Run unit test') {
+            steps {
+                   echo 'cd backend && npm run test'
+            }
+        }
+        stage('Run Integration test') {
+            steps {
+                echo 'run component test'
+            }
     }
 }
