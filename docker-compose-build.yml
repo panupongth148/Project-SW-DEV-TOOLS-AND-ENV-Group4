@@ -2,8 +2,8 @@ version: "3.8"
 
 services:
   frontend:
-    image: team4/team4-frontend
+    image: panupong148th/team-4-frontend
     build: ./frontend
   backend:
-    image: team4/team4-backend
+    image: panupong148th/team-4-backend
     build: ./backend
