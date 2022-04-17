@@ -21,23 +21,6 @@ const routes = [
     meta: { guess: true },
     component: () => import('../views/account/register.vue')
   },
-  {
-    path: '/store/managebook/:storeId',
-    name: 'manageStore',
-    component: () => import('../views/store/manageBook.vue')
-  },
-  {
-    path: '/store/editbook/:bookId',
-    name: 'editBook',
-
-    component: () => import('../views/store/editBook.vue')
-  },
-  {
-    path: '/store/addbook/:storeId',
-    name: 'addBook',
-
-    component: () => import('../views/store/addBook.vue')
-  }
 ]
 
 const router = new VueRouter({

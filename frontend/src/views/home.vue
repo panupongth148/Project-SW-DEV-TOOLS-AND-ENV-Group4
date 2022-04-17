@@ -262,9 +262,11 @@ export default {
   },
   methods: {
     getBooks(key, type) {
+      console.log("key : "+ key)
+      console.log("type : "+ type)
       this.conditionSearch = key;
       axios
-        .get("/getallbook", {
+        .get("http://localhost:3000/", {
           params: {
             search: key,
             type: type,
@@ -273,7 +275,7 @@ export default {
         // .get("http://localhost:8080/getAllAccount")
         .then((response) => {
           this.books = response.data
-          console.log(response.data[0].book_name);
+          console.log(response.data.book_name);
           console.log(this.books);
           this.checkExisting();
         })
