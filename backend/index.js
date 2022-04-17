@@ -22,8 +22,6 @@ const storeRouter = require('./routes/store')
 const userRouter = require('./routes/user')
 
 app.use(bookRouter.router)
-// app.use(commentRouter.router)
-// app.use(imageRouter.router)
 app.use(storeRouter.router)
 app.use(userRouter.router)
 
