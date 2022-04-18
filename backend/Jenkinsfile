@@ -25,8 +25,8 @@ pipeline {
         stage("Deploy") {
             steps {
                 withCredentials([string(credentialsId: 'T04_host', variable: 'host'), 
-                string(credentialsId: 'T04_FRONTEND_USERNAME', variable: 'username'), 
-                string(credentialsId: 'T04_FRONTEND_PASS', variable: 'password')]) 
+                string(credentialsId: 'T04_BACKEND_USERNAME', variable: 'username'), 
+                string(credentialsId: 'T04_BACKEND_PASS', variable: 'password')]) 
                 {
                     script{
                         def remote = [:]
