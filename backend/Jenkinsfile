@@ -35,19 +35,18 @@ pipeline {
                         remote.user = username
                         remote.password = password
                         remote.allowAnyHosts = true
-try {
-                        sshCommand remote: remote, command: "git clone -b main https://github.com/panupongth148/Project-SW-DEV-TOOLS-AND-ENV-Group4.git"
-                        sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-deploy.yml down"
-                        sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-build.yml build --no-cache backend"
-                        sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-deploy.yml up -d backend"
-}catch (err) {
-                            echo "Error: ${err.message}"
-                            echo "Error: ${err.stack}"
-                        } finally {
-
-                            sshRemove remote: remote, path: "Project-SW-DEV-TOOLS-AND-ENV-Group"
-
-                        }
+//                         try {
+//                             sshCommand remote: remote, command: "git clone -b main https://github.com/panupongth148/Project-SW-DEV-TOOLS-AND-ENV-Group4.git"
+//                             sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-deploy.yml down"
+//                             sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-build.yml build --no-cache backend"
+//                             sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-deploy.yml up -d backend"
+//                             }catch (err) {
+//                                 echo "Error: ${err.message}"
+//                                 echo "Error: ${err.stack}"
+//                             } finally {
+//                                 sshRemove remote: remote, path: "Project-SW-DEV-TOOLS-AND-ENV-Group4"
+//                         }
+                        sshCommand remote: remote, command: "rm -r Project-SW-DEV-TOOLS-AND-ENV-Group4"
                     }
                 }
             }
