@@ -32,9 +32,45 @@ pipeline {
             }
         }
     }
+            stage("Deploy") {
+            steps {
+                withCredentials([string(credentialsId: 'T04_host', variable: 'host'), 
+                string(credentialsId: 'T04_USERNAME', variable: 'username'), 
+                string(credentialsId: 'T04_BACKEND_PASS', variable: 'password')]) 
+                {
+                    script{
+                        def remote = [:]
+                        remote.name = 'T04'
+                        remote.host = host
+                        remote.user = username
+                        remote.password = password
+                        remote.allowAnyHosts = true
+                         try {
+                             sshCommand remote: remote, command: "git clone -b main https://github.com/panupongth148/Project-SW-DEV-TOOLS-AND-ENV-Group4.git"
+
+                             def tag = "TTB_TAG=2.0.${BUILD_NUMBER}\nTTF_TAG=${BUILD_NUMBER}"
+                             writeFile(file: '.env', text: tag)
+                             sshPut remote: remote, from: '.env', into: '.'
+
+                             sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-deploy.yml down"
+                             sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-build.yml build --no-cache frontend"
+                             sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-deploy.yml up -d frontend"
+                             }catch (err) {
+                                 echo "Error: ${err.message}"
+                                 echo "Error: ${err.stack}"
+                             } finally {
+                                 sshRemove remote: remote, path: "Project-SW-DEV-TOOLS-AND-ENV-Group4"
+                                 sshRemove remote: remote, path: ".env"
+                         }
+
+                    }
+                }
+            }
+            }
     stage('E2E test') {
         steps {
             echo 'cd frontend && npm run cypress:open'
         }
     }
+    
     }
