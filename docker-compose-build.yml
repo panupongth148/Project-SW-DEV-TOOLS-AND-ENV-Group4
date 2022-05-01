@@ -2,8 +2,8 @@ version: "3.8"
 
 services:
   frontend:
-    image: panupong148th/team-4-frontend:${TTF_TAG}
+    image: panupong148th/team-4-frontend:${FRONTEND_TAG}
     build: ./frontend
   backend:
-    image: panupong148th/team-4-backend:${TTF_TAG}
+    image: panupong148th/team-4-backend:${BACKEND_TAG}
     build: ./backend
