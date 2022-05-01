@@ -35,9 +35,9 @@ pipeline {
                         remote.user = username
                         remote.password = password
                         remote.allowAnyHosts = true
-//                         sshCommand remote: remote, command: "git clone https://github.com/panupongth148/Project-SW-DEV-TOOLS-AND-ENV-Group4.git"
-//                         sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-build.yml build team-4-backend"
-//                         sshCommand remote: remote, command: "docker-compose -f team-4-backend up -d"
+                         sshCommand remote: remote, command: "git clone https://github.com/panupongth148/Project-SW-DEV-TOOLS-AND-ENV-Group4.git"
+                         sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-build.yml build team-4-backend"
+                         sshCommand remote: remote, command: "docker-compose -f team-4-backend up -d"
                         sshCommand remote: remote, command: "rm -r Project-SW-DEV-TOOLS-AND-ENV-Group4"
                     }
                 }
