@@ -37,6 +37,11 @@ pipeline {
                         remote.allowAnyHosts = true
                          try {
                              sshCommand remote: remote, command: "git clone -b main https://github.com/panupongth148/Project-SW-DEV-TOOLS-AND-ENV-Group4.git"
+
+                             def tag = "TTB_TAG=2.0.${BUILD_NUMBER}\nTTF_TAG=2.0.${BUILD_NUMBER}"
+                             writeFile(file: '.env', text: tag)
+                             sshPut remote: remote, from: '.env', into: '.'
+
                              sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-deploy.yml down"
                              sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-build.yml build --no-cache backend"
                              sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-deploy.yml up -d backend"
@@ -45,6 +50,7 @@ pipeline {
                                  echo "Error: ${err.stack}"
                              } finally {
                                  sshRemove remote: remote, path: "Project-SW-DEV-TOOLS-AND-ENV-Group4"
+                                 sshRemove remote: remote, path: ".env"
                          }
 
                     }
