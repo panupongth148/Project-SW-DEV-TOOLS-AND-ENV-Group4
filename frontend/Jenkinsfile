@@ -8,7 +8,7 @@ pipeline {
             }
             stage('Download Dependencies') {
         steps {
-                sh 'cd frontend && npm install'
+                sh 'cd frontend && npm config set python python2.7 && npm install'
             }
         }
          stage('Units Testing') {
