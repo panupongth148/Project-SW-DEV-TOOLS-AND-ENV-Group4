@@ -38,7 +38,7 @@ pipeline {
                          try {
                              sshCommand remote: remote, command: "git clone -b main https://github.com/panupongth148/Project-SW-DEV-TOOLS-AND-ENV-Group4.git"
 
-                             def tag = "TTB_TAG=2.0.${BUILD_NUMBER}\nTTF_TAG=2.0.${BUILD_NUMBER}"
+                             def tag = "BACKEND_TAG=3.0.${BUILD_NUMBER}\nFRONTEND_TAG=2.0.${BUILD_NUMBER}"
                              writeFile(file: '.env', text: tag)
                              sshPut remote: remote, from: '.env', into: '.'
 
