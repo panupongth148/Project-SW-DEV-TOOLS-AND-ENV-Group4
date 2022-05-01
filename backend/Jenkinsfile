@@ -57,5 +57,13 @@ pipeline {
                 }
             }
             }
+        stage('E2E Test') {
+            steps {
+                dir('backend') {
+                    sh "npm test:e2e"
+                }
+                publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: './backend', reportFiles: 'e2e.html', reportName: 'E2E Test Report', reportTitles: 'E2E Test Report'])
+            }
+}
     }
 }
