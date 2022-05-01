@@ -8,16 +8,12 @@ pipeline {
             }
             stage('Download Dependencies') {
         steps {
-            dir("frontend") {
                 sh 'cd frontend && npm install'
-                }
             }
         }
          stage('Units Testing') {
         steps {
-            dir("frontend/cypress") {
                 sh 'cd frontend && npm unit-test'
-                }
             }
         }
             stage('Run component test') {
@@ -27,9 +23,7 @@ pipeline {
             }
             stage('Conponents Testing') {
         steps {
-            dir("frontend/cypress") {
                 sh 'cd frontend && npm com-test'
-                }
             }
         }
                 stage("Deploy") {
