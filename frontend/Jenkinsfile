@@ -1,76 +1,76 @@
 pipeline {
     agent any
-
-    stage('Pull Code') {
-        steps {
-            git branch: 'main', url: 'https://github.com/panupongth148/Project-SW-DEV-TOOLS-AND-ENV-Group4.git'
-            }
-        }
-        stage('Download Dependencies') {
-    steps {
-        dir("frontend") {
-            sh 'cd frontend && npm install'
-            }
-        }
-    }
-     stage('Units Testing') {
-    steps {
-        dir("frontend/cypress") {
-            sh 'cd frontend && npm unit-test'
-            }
-        }
-    }
-        stage('Run component test') {
+    stages{
+        stage('Pull Code') {
             steps {
-                sh 'cd backend && npm test'
-            }
-        }
-        stage('Conponents Testing') {
-    steps {
-        dir("frontend/cypress") {
-            sh 'cd frontend && npm com-test'
-            }
-        }
-    }
-            stage("Deploy") {
-            steps {
-                withCredentials([string(credentialsId: 'T04_host', variable: 'host'), 
-                string(credentialsId: 'T04_USERNAME', variable: 'username'), 
-                string(credentialsId: 'T04_BACKEND_PASS', variable: 'password')]) 
-                {
-                    script{
-                        def remote = [:]
-                        remote.name = 'T04'
-                        remote.host = host
-                        remote.user = username
-                        remote.password = password
-                        remote.allowAnyHosts = true
-                         try {
-                             sshCommand remote: remote, command: "git clone -b main https://github.com/panupongth148/Project-SW-DEV-TOOLS-AND-ENV-Group4.git"
-
-                             def tag = "TTB_TAG=2.0.${BUILD_NUMBER}\nTTF_TAG=${BUILD_NUMBER}"
-                             writeFile(file: '.env', text: tag)
-                             sshPut remote: remote, from: '.env', into: '.'
-
-                             sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-deploy.yml down"
-                             sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-build.yml build --no-cache frontend"
-                             sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-deploy.yml up -d frontend"
-                             }catch (err) {
-                                 echo "Error: ${err.message}"
-                                 echo "Error: ${err.stack}"
-                             } finally {
-                                 sshRemove remote: remote, path: "Project-SW-DEV-TOOLS-AND-ENV-Group4"
-                                 sshRemove remote: remote, path: ".env"
-                         }
-
-                    }
+                git branch: 'main', url: 'https://github.com/panupongth148/Project-SW-DEV-TOOLS-AND-ENV-Group4.git'
                 }
             }
-            }
-    stage('E2E test') {
+            stage('Download Dependencies') {
         steps {
-            echo 'cd frontend && npm run cypress:open'
+            dir("frontend") {
+                sh 'cd frontend && npm install'
+                }
+            }
+        }
+         stage('Units Testing') {
+        steps {
+            dir("frontend/cypress") {
+                sh 'cd frontend && npm unit-test'
+                }
+            }
+        }
+            stage('Run component test') {
+                steps {
+                    sh 'cd backend && npm test'
+                }
+            }
+            stage('Conponents Testing') {
+        steps {
+            dir("frontend/cypress") {
+                sh 'cd frontend && npm com-test'
+                }
+            }
+        }
+                stage("Deploy") {
+                steps {
+                    withCredentials([string(credentialsId: 'T04_host', variable: 'host'), 
+                    string(credentialsId: 'T04_USERNAME', variable: 'username'), 
+                    string(credentialsId: 'T04_BACKEND_PASS', variable: 'password')]) 
+                    {
+                        script{
+                            def remote = [:]
+                            remote.name = 'T04'
+                            remote.host = host
+                            remote.user = username
+                            remote.password = password
+                            remote.allowAnyHosts = true
+                             try {
+                                 sshCommand remote: remote, command: "git clone -b main https://github.com/panupongth148/Project-SW-DEV-TOOLS-AND-ENV-Group4.git"
+
+                                 def tag = "TTB_TAG=2.0.${BUILD_NUMBER}\nTTF_TAG=${BUILD_NUMBER}"
+                                 writeFile(file: '.env', text: tag)
+                                 sshPut remote: remote, from: '.env', into: '.'
+
+                                 sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-deploy.yml down"
+                                 sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-build.yml build --no-cache frontend"
+                                 sshCommand remote: remote, command: "docker-compose -f Project-SW-DEV-TOOLS-AND-ENV-Group4/docker-compose-deploy.yml up -d frontend"
+                                 }catch (err) {
+                                     echo "Error: ${err.message}"
+                                     echo "Error: ${err.stack}"
+                                 } finally {
+                                     sshRemove remote: remote, path: "Project-SW-DEV-TOOLS-AND-ENV-Group4"
+                                     sshRemove remote: remote, path: ".env"
+                             }
+
+                        }
+                    }
+                }
+                }
+        stage('E2E test') {
+            steps {
+                echo 'cd frontend && npm run cypress:open'
+            }
         }
     }
-    
     }
