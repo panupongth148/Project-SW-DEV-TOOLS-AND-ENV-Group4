@@ -59,9 +59,6 @@ const addBook =  async function (req, res, next) {
       }
       // console.log(bookobj)
       try{
-      const resMessage = addBookToDatabase(bookobj)
-      return res.json({ message: resMessage })
-      console.log(bookobj)
       await firebase.firestore()
       .collection("book")
       .add(bookobj)
