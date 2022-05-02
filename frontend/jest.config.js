@@ -12,7 +12,7 @@ module.exports = {
       "/node_modules/(?!vue-loading-spinner)"
   ],
   moduleNameMapper: {
-      "^@/(.*)$": "<rootDir>/$1"
+    '^@/(.*)$': '<rootDir>/$1'
   },
   verbose: true,
   collectCoverage: true,
