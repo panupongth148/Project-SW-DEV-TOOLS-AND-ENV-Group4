@@ -52,7 +52,7 @@ pipeline {
 //                                  sshRemove remote: remote, path: "Project-SW-DEV-TOOLS-AND-ENV-Group4"
 //                                  sshRemove remote: remote, path: ".env"
 //                          }
-                        sshCommand remote: remote, command: "rm -r Project-SW-DEV-TOOLS-AND-ENV-Group4"
+sshRemove remote: remote, path: "Project-SW-DEV-TOOLS-AND-ENV-Group4"
                     }
                 }
             }
