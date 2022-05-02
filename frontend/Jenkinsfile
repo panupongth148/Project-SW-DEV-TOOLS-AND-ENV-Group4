@@ -13,17 +13,17 @@ pipeline {
         }
          stage('Units Testing') {
         steps {
-                sh 'cd frontend/cypress && npm run test:unit'
+                sh 'cd frontend/cypress'
             }
         }
             stage('Run component test') {
                 steps {
-                    sh 'cd backend && npm run test'
+                    sh 'cd backend'
                 }
             }
             stage('Conponents Testing') {
         steps {
-                sh 'cd frontend/cypress && npm run test:com'
+                sh 'cd frontend/cypress'
             }
         }
                 stage("Deploy") {
